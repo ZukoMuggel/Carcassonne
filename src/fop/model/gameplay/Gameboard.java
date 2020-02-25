@@ -52,7 +52,7 @@ public class Gameboard extends Observable<Gameboard> {
 		t.x = x;
 		t.y = y;
 		board[x][y] = newestTile = t;
-		tiles.add(t);
+		tiles.add(t);//??
 
 		connectNodes(x, y);
 		push(this); // pushes the new gameboard state to its observers (= GameBoardPanel)
