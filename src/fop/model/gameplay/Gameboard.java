@@ -1,5 +1,4 @@
 package fop.model.gameplay;
-//???
 
 import static fop.model.tile.FeatureType.CASTLE;
 import static fop.model.tile.FeatureType.FIELDS;
@@ -53,7 +52,7 @@ public class Gameboard extends Observable<Gameboard> {
 		t.x = x;
 		t.y = y;
 		board[x][y] = newestTile = t;
-		tiles.add(t);//??
+		tiles.add(t);
 
 		connectNodes(x, y);
 		push(this); // pushes the new gameboard state to its observers (= GameBoardPanel)
@@ -75,13 +74,12 @@ public class Gameboard extends Observable<Gameboard> {
 
 		// Check top tile
 		// TODO
-			// This might be helpful:
-			// As we already ensured that the tile on top exists and fits the tile at x, y,
-			// we know that if the feature of its top is a ROAD, the feature at the bottom
-			// of the tile on top is a ROAD aswell. As every ROAD has FIELD nodes as
-			// neighbours on both sides, we can connect those nodes of the two tiles. The
-			// same logic applies to the next three routines.
-
+		// This might be helpful:
+		// As we already ensured that the tile on top exists and fits the tile at x, y,
+		// we know that if the feature of its top is a ROAD, the feature at the bottom
+		// of the tile on top is a ROAD aswell. As every ROAD has FIELD nodes as
+		// neighbours on both sides, we can connect those nodes of the two tiles. The
+		// same logic applies to the next three routines.
 
 		// Check left tile
 		// TODO
@@ -91,6 +89,41 @@ public class Gameboard extends Observable<Gameboard> {
 
 		// Check bottom tile
 		// TODO
+	}
+
+	/**
+	 * This method checks if the spot where the given Tile shall be placed in is
+	 * surrounded by only null and therefore invalid
+	 * 
+	 * @param t Given Tile object for which check shall be performed
+	 * @param x x coordinate of the given Tile
+	 * @param y x coordinate of the given Tile
+	 * @return true if all surrounding spots are null, false if not
+	 */
+	private boolean checkSurroundedByNull(Tile t, int x, int y) {
+		boolean allNull = true;
+		
+		//edges of gameboard treatment
+		boolean dontCheck0 = x - 1 < 0;
+		boolean dontCheck1 = x + 1 > 143;
+		boolean dontCheck2 = y - 1 < 0;
+		boolean dontCheck3 = y + 1 > 143;
+
+		if (board[x - 1][y] != null && dontCheck0 == false) {
+
+		}
+		if (board[x + 1][y] != null && dontCheck1 == false) {
+
+		}
+		if (board[x][y - 1] != null && dontCheck2 == false) {
+
+		}
+		if (board[x][y + 1] != null && dontCheck3 == false) {
+
+		}
+		allNull = false;
+		return allNull;
+
 	}
 
 	/**
@@ -104,18 +137,56 @@ public class Gameboard extends Observable<Gameboard> {
 	 */
 	public boolean isTileAllowed(Tile t, int x, int y) {
 
+		Tile checkTile = board[x][y];
+		boolean allChecked = true;
+		
+		//edges of gameboard treatment
+		boolean dontCheck0 = x - 1 < 0;
+		boolean dontCheck1 = x + 1 > 143;
+		boolean dontCheck2 = y - 1 < 0;
+		boolean dontCheck3 = y + 1 > 143;
+
 		// Check top tile
-		// TODO
+		if(dontCheck2 == false) {
+			checkTile = board[x][y - 1]; // Tile on the top of the given tile
+			if (checkTile.getNode(BOTTOM) != t.getNode(TOP)) { // checks if the adjacent tiles are valid
+				allChecked = false;
+			}
+		}
+
 
 		// Check left tile
-		// TODO
+		if(dontCheck0 == false) {
+			checkTile = board[x - 1][y]; // Tile on the left of the given tile
+
+			if (checkTile.getNode(RIGHT) != t.getNode(LEFT)) {
+				allChecked = false;
+			}
+		}
+
 
 		// Check right tile
-		// TODO
+		if(dontCheck1 == false) {
+			checkTile = board[x + 1][y]; // Tile on the right of the given tile
+			if (checkTile.getNode(LEFT) != t.getNode(RIGHT)) {
+				allChecked = false;
+			}
+		}
+
 
 		// Check bottom tile
-		// TODO
-		return false;
+		if(dontCheck3 == false) {
+			checkTile = board[x][y + 1]; // Tile on the bottom of the given tile
+			if (checkTile.getNode(TOP) != t.getNode(BOTTOM)) {
+				allChecked = false;
+			}
+		}
+
+
+		if (allChecked == true && checkSurroundedByNull(t, x, y) == false)
+			return true; // allchecked is true if (x;y) is a valid position
+		else
+			return false;
 	}
 
 	/**
@@ -127,19 +198,24 @@ public class Gameboard extends Observable<Gameboard> {
 	 *         if not.
 	 */
 	public boolean isTileAllowedAnywhere(Tile newTile) {
-		// Iterate over all tiles
-			// check top
-			// TODO
-
-			// check left
-			// TODO
-
-			// check right
-			// TODO
-
-			// check bottom
-			// TODO
-		
+		// iterate over all x
+		for (int board_x = 0; board_x < 144; board_x++) {
+			// iterate over all y
+			for (int board_y = 0; board_y < 144; board_y++) {
+				// only test spot if not surrounded by only null and spot is not occupied by
+				// another tile
+				if (checkSurroundedByNull(newTile, board_x, board_y) == false && board[board_x][board_y] == null) {
+					// iterate over all possible rotations
+					for (int num_of_rot = 0; num_of_rot < 4; num_of_rot++) {
+						if (isTileAllowed(newTile, board_x, board_y)) {
+							// valid position was found
+							return true;
+						}
+						newTile.rotateRight();
+					}
+				}
+			}
+		}
 		// no valid position was found
 		return false;
 	}
@@ -149,14 +225,16 @@ public class Gameboard extends Observable<Gameboard> {
 	 * each adjacent tile).
 	 */
 	public void calculateMonasteries(State state) {
-		//the methods getNode() and getType of class Tile and FeatureNode might be helpful
-		
-		//Check all surrounding tiles and add the points
-				
-		//Points are given if the landscape is complete or the game is over
-		//Meeples are just returned in case of state == State.GAME_OVER
-				
-		//After adding the points to the overall points of the player, set the score to 1 again
+		// the methods getNode() and getType of class Tile and FeatureNode might be
+		// helpful
+
+		// Check all surrounding tiles and add the points
+
+		// Points are given if the landscape is complete or the game is over
+		// Meeples are just returned in case of state == State.GAME_OVER
+
+		// After adding the points to the overall points of the player, set the score to
+		// 1 again
 	}
 
 	/**
@@ -185,12 +263,11 @@ public class Gameboard extends Observable<Gameboard> {
 	 */
 	public void calculatePoints(FeatureType type, State state) {
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
-		
-		// queue defines the connected graph. If this queue is empty, every node in this graph will be visited.
+
+		// queue defines the connected graph. If this queue is empty, every node in this
+		// graph will be visited.
 		// if nodeList is non-empty, insert the next node of nodeList into this queue
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
-		
-
 
 		int score = 0;
 		boolean completed = true; // Is the feature completed? Is set to false if a node is visited that does not
@@ -199,15 +276,14 @@ public class Gameboard extends Observable<Gameboard> {
 		queue.push(nodeList.remove(0));
 		// Iterate as long as the queue is not empty
 		// Remember: queue defines a connected graph
-		
-		//TODO
-		
+
+		// TODO
+
 		// Hint:
 		// If there is one straight positioned node that does not connect to another
 		// tile, the feature cannot be completed.
 
-
-		//TODO
+		// TODO
 	}
 
 	/**
@@ -313,11 +389,12 @@ public class Gameboard extends Observable<Gameboard> {
 	public Tile[][] getBoard() {
 		return board;
 	}
-	
+
 	public FeatureGraph getGraph() {
 		return this.graph;
 	}
+
 	public void setFeatureGraph(FeatureGraph graph) {
-		this.graph = graph; 
+		this.graph = graph;
 	}
 }
