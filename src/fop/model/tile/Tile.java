@@ -137,15 +137,28 @@ public class Tile {
 	 */
 	public void rotateRight() {
 		SortedMap<Position, FeatureNode> rotatedNodes = new TreeMap<Position, FeatureNode>();
-
-		// Iterate over all positions of the tile
-		// rotate nodes
-		// TODO
-
+		
+		//Pass features to rotateNodes
+		
+		rotatedNodes.put(Position.TOPLEFT, this.getNode(Position.BOTTOMLEFT));
+		rotatedNodes.put(Position.TOP, this.getNode(Position.LEFT));
+		rotatedNodes.put(Position.TOPRIGHT, this.getNode(Position.TOPLEFT));
+		rotatedNodes.put(Position.LEFT, this.getNode(Position.BOTTOM));
+		rotatedNodes.put(Position.CENTER, this.getNode(Position.CENTER));
+		rotatedNodes.put(Position.RIGHT, this.getNode(CENTER));
+		rotatedNodes.put(Position.BOTTOMLEFT, this.getNode(Position.BOTTOMRIGHT));
+		rotatedNodes.put(Position.BOTTOM, this.getNode(Position.RIGHT));
+		rotatedNodes.put(Position.BOTTOMRIGHT, this.getNode(Position.TOPRIGHT));
+		
+		//Overwrite nodes with rotateNodes -> perform rotation to the right
 		nodes = rotatedNodes;
 
-		// set rotation
-		// TODO
+		//Increase rotation by 1. Reset if 3. (360° == 0°)
+		if(rotation == 3) {
+			rotation = 0;
+		} else {
+			rotation++;
+		}
 	}
 
 	/**
