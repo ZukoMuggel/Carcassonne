@@ -72,23 +72,47 @@ public class Gameboard extends Observable<Gameboard> {
 
 		Tile t = board[x][y];
 
+		boolean topcheck=false;
+		boolean leftcheck=false;
+		boolean rightcheck=false;
+		boolean bottomcheck=false;
+
 		// Check top tile
 		// TODO
-		// This might be helpful:
-		// As we already ensured that the tile on top exists and fits the tile at x, y,
-		// we know that if the feature of its top is a ROAD, the feature at the bottom
-		// of the tile on top is a ROAD aswell. As every ROAD has FIELD nodes as
-		// neighbours on both sides, we can connect those nodes of the two tiles. The
-		// same logic applies to the next three routines.
+			// This might be helpful:
+			// As we already ensured that the tile on top exists and fits the tile at x, y,
+			// we know that if the feature of its top is a ROAD, the feature at the bottom
+			// of the tile on top is a ROAD aswell. As every ROAD has FIELD nodes as
+			// neighbours on both sides, we can connect those nodes of the two tiles. The
+			// same logic applies to the next three routines.
+		if(x-1<0)topcheck=true;//dummy check,we have to give something after if
+		else if(board[x-1][y]==null)topcheck=true;
+		else if(board[x-1][y].getNode(BOTTOM).getType()==t.getNode(TOP).getType())
+			graph.addEdge(t.getNode(TOP),board[x-1][y].getNode(BOTTOM));
 
 		// Check left tile
 		// TODO
+		if(y-1<0)leftcheck=true;
+		else if(board[x][y-1]==null)leftcheck=true;
+		else if(board[x][y-1].getNode(RIGHT).getType()==t.getNode(LEFT).getType())
+			graph.addEdge(t.getNode(LEFT),board[x-1][y].getNode(RIGHT));
+
 
 		// Check right tile
 		// TODO
+		if(y+1>=board[0].length)rightcheck=true;
+		else if(board[x][y+1]==null)rightcheck=true;
+		else if(board[x][y+1].getNode(LEFT).getType()==t.getNode(RIGHT).getType())
+			graph.addEdge(t.getNode(RIGHT),board[x-1][y].getNode(LEFT));
+
 
 		// Check bottom tile
 		// TODO
+		if(x+1>=board.length)bottomcheck=true;
+		else if(board[x+1][y]==null)bottomcheck=true;
+		else if(board[x+1][y].getNode(TOP).getType()==t.getNode(BOTTOM).getType())
+			graph.addEdge(t.getNode(BOTTOM),board[x-1][y].getNode(TOP));
+		
 	}
 
 	/**
