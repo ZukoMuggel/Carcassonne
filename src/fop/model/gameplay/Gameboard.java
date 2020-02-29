@@ -287,7 +287,7 @@ public class Gameboard extends Observable<Gameboard> {
 			}
 			
 		}
-if(state != State.GAME_OVER) {
+                if(state != State.GAME_OVER) {
 			
 			for(int x =0;x<board.length;x++) {
 				for(int y=0;y<board[0].length;y++) {
