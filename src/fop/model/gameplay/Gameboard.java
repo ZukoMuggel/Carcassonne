@@ -255,7 +255,7 @@ public class Gameboard extends Observable<Gameboard> {
 		// Points are given if the landscape is complete or the game is over
 		// Meeples are just returned in case of state == State.GAME_OVER
 		
-
+    //What is that mean? why should we set the score to 1 ,and which socre? we also dont have such a methode to change the value of socre 
 		// After adding the points to the overall points of the player, set the score to
 		// 1 again
 		
