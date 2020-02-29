@@ -254,9 +254,70 @@ public class Gameboard extends Observable<Gameboard> {
 
 		// Points are given if the landscape is complete or the game is over
 		// Meeples are just returned in case of state == State.GAME_OVER
+		
 
 		// After adding the points to the overall points of the player, set the score to
 		// 1 again
+		
+		if(state == State.GAME_OVER) {
+			
+			for(int x =0;x<board.length;x++) {
+				for(int y=0;y<board[0].length;y++) {
+					
+					
+					if(board[x][y].featureAtPosition(Position.CENTER)==FeatureType.MONASTERY && board[x][y].hasMeeple()) {
+						
+							Player a =board[x][y].getMeeple();
+							int score=0;
+							
+							
+							for(int i =0;i<3;i++) {
+								for(int j =0;j<3;j++) {
+									
+									if(board[x-1+i][y-1+j]!=null)score++;
+								}
+							}
+							if(score!=9)a.addScore(score);
+							a.returnMeeple();
+							
+						
+					}
+						
+				}
+			}
+			
+		}
+if(state != State.GAME_OVER) {
+			
+			for(int x =0;x<board.length;x++) {
+				for(int y=0;y<board[0].length;y++) {
+					
+					
+					if(board[x][y].featureAtPosition(Position.CENTER)==FeatureType.MONASTERY && board[x][y].hasMeeple()) {
+						
+							Player a =board[x][y].getMeeple();
+							boolean complete =false;
+							
+							
+							
+							for(int i =0;i<3;i++) {
+								for(int j =0;j<3;j++) {
+									
+									if(board[x-1+i][y-1+j]==null)complete=true;
+								}
+							}
+							if(complete)continue;
+							
+							a.addScore(9);
+							
+							
+						
+					}
+						
+				}
+			}
+			
+		}
 	}
 
 	/**
