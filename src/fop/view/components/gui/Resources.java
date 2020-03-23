@@ -104,6 +104,17 @@ public class Resources implements GameConstants {
 	 */
 	private void saveScoreEntries() throws IOException {
 		// TODO
+		try ( FileWriter writer = new FileWriter ( "highscores.txt" );
+				PrintWriter pw = new PrintWriter ( writer ) ) 
+		{		
+		for(int i =0;i<scoreEntries.size();i++) {
+			scoreEntries.get(i).write(pw);
+		}
+		}
+		catch ( IOException exc ) {
+			 System.err.println("sry,we cant find ur file");
+		 }
+		
 	}
 
 	/**
@@ -120,8 +131,30 @@ public class Resources implements GameConstants {
 
 	private void loadScoreEntries() {
 		scoreEntries = new ArrayList<>();
-
 		// TODO
+		ArrayList<String> entryString= new  ArrayList<>();
+		
+		//read file from the highscores.txt
+		try ( FileReader reader1 = new FileReader ( "highscores.txt" );
+				BufferedReader reader2 = new BufferedReader ( reader1 ) ) {
+				for(String r=reader2.readLine();r!=null;r=reader2.readLine()) {
+					entryString.add(r);
+				}
+				}
+		 catch ( FileNotFoundException e){
+			 System.err.println("sry,we cant find ur file");
+		 }
+		 catch ( IOException exc ) {
+			 System.err.println("sry,we cant find ur file");
+		 }
+		
+		//save the ScoreEntry to list scoreEntries
+		while(entryString.size()!=0) {
+			scoreEntries.add(ScoreEntry.read(entryString.get(0)));
+			entryString.remove(0);
+		}
+
+		
 	}
 
 	/**
@@ -135,6 +168,18 @@ public class Resources implements GameConstants {
 
 	public void addScoreEntry(ScoreEntry scoreEntry) {
 		// TODO
+		if(scoreEntries.size()==0)scoreEntries.add(scoreEntry);
+		else {
+			scoreEntries.add(scoreEntry);
+			Collections.sort(scoreEntries,new Comparator<ScoreEntry>() {
+				public int compare(ScoreEntry s1, ScoreEntry s2) {
+					return -s1.compareTo(s2);
+			}
+			}
+			);
+			
+		}
+	
 	}
 
 	public void clearEntries() throws IOException {
