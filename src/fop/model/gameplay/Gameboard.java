@@ -409,19 +409,19 @@ public class Gameboard extends Observable<Gameboard> {
 		//if in this tile only one node belongs to this type,which means it is the end of feature
 		if(i>1) {
 		
-		if(board[x][y].getNode(TOP).getType()==type) {
+		if(board[x][y].getNode(TOP).getType()==type && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 			if(board[x][y].getNode(TOP).hasMeeple()) {
 				spielfigur.put(board[x][y].getNode(TOP),board[x][y].getNode(TOP).getPlayer());
 			}
 			if(type==FeatureType.CASTLE)score=+2;//for CASTLE game-not-over
 		    else if(type==FeatureType.ROAD) score++;//for ROAD game-over and game-not-over
 		    else score++;//for Felder game-over
-		    if(!besuchtenode.contains(board[x][y].getNode(TOP)))besuchtenode.add(board[x][y].getNode(TOP));
+		    besuchtenode.add(board[x][y].getNode(TOP));
 			findallconnected( type,x, y+1,score,besuchtenode,spielfigur); 
 		}
 		
 		
-		if(board[x][y].getNode(BOTTOM).getType()==type) {
+		if(board[x][y].getNode(BOTTOM).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 			if(board[x][y].getNode(BOTTOM).hasMeeple()) {				
 				spielfigur.put(board[x][y].getNode(BOTTOM), board[x][y].getNode(BOTTOM).getPlayer());
 			}
@@ -429,12 +429,12 @@ public class Gameboard extends Observable<Gameboard> {
 			else if(type==FeatureType.ROAD) score++;
 		    else score++;
 		    
-			if(!besuchtenode.contains(board[x][y].getNode(BOTTOM)))besuchtenode.add(board[x][y].getNode(BOTTOM));
+			besuchtenode.add(board[x][y].getNode(BOTTOM));
 			findallconnected( type,x, y-1,score,besuchtenode,spielfigur); 
 		}
 		
 		
-		if(board[x][y].getNode(LEFT).getType()==type) {
+		if(board[x][y].getNode(LEFT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 			if(board[x][y].getNode(LEFT).hasMeeple()) {
 				
 				spielfigur.put(board[x][y].getNode(LEFT),board[x][y].getNode(LEFT).getPlayer());
@@ -442,13 +442,13 @@ public class Gameboard extends Observable<Gameboard> {
 			if(type==FeatureType.CASTLE)score=+2;
 			else if(type==FeatureType.ROAD) score++;
 		    else score++;
-		    if(!besuchtenode.contains(board[x][y].getNode(LEFT)))besuchtenode.add(board[x][y].getNode(LEFT));
+		   besuchtenode.add(board[x][y].getNode(LEFT));
 			findallconnected( type,x-1, y,score,besuchtenode,spielfigur); 
 		}
 		
 		
 		
-		if(board[x][y].getNode(RIGHT).getType()==type) {
+		if(board[x][y].getNode(RIGHT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 			if(board[x][y].getNode(RIGHT).hasMeeple()) {
 				
 				spielfigur.put( board[x][y].getNode(RIGHT),board[x][y].getNode(RIGHT).getPlayer());
@@ -457,36 +457,36 @@ public class Gameboard extends Observable<Gameboard> {
 		    if(type==FeatureType.ROAD) score++;
 		    else if(type==FeatureType.ROAD) score++;
 		    else score++;
-		    if(!besuchtenode.contains(board[x][y].getNode(RIGHT)))besuchtenode.add(board[x][y].getNode(RIGHT));
+		    besuchtenode.add(board[x][y].getNode(RIGHT));
 			findallconnected( type,x+1, y,score,besuchtenode,spielfigur); 
 		}
 		}
 		//when we come to the end of this FeatureType,we need to save it and add the score 
 		else {
-			if(board[x][y].getNode(TOP).getType()==type) {
+			if(board[x][y].getNode(TOP).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 				if(board[x][y].getNode(TOP).hasMeeple()) {
 					spielfigur.put( board[x][y].getNode(TOP),board[x][y].getNode(TOP).getPlayer());
 				}
 				if(type==FeatureType.CASTLE)score=+2;
 			    if(type==FeatureType.ROAD) score++;
-			    if(!besuchtenode.contains(board[x][y].getNode(TOP)))besuchtenode.add(board[x][y].getNode(TOP));
+			   besuchtenode.add(board[x][y].getNode(TOP));
 				
 			}
 			
 			
-			if(board[x][y].getNode(BOTTOM).getType()==type) {
+			if(board[x][y].getNode(BOTTOM).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 				if(board[x][y].getNode(BOTTOM).hasMeeple()) {				
 					spielfigur.put(board[x][y].getNode(BOTTOM),board[x][y].getNode(BOTTOM).getPlayer());
 				}
 				if(type==FeatureType.CASTLE)score=+2;
 			    else if(type==FeatureType.ROAD) score++;
 			    else score++;
-			    if(!besuchtenode.contains(board[x][y].getNode(BOTTOM)))besuchtenode.add(board[x][y].getNode(BOTTOM));
+			    besuchtenode.add(board[x][y].getNode(BOTTOM));
 				
 			}
 			
 			
-			if(board[x][y].getNode(LEFT).getType()==type) {
+			if(board[x][y].getNode(LEFT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 				if(board[x][y].getNode(LEFT).hasMeeple()) {
 					
 					spielfigur.put(board[x][y].getNode(LEFT), board[x][y].getNode(LEFT).getPlayer());
@@ -494,13 +494,13 @@ public class Gameboard extends Observable<Gameboard> {
 				if(type==FeatureType.CASTLE)score=+2;
 				else if(type==FeatureType.ROAD) score++;
 			    else score++;
-			    if(!besuchtenode.contains(board[x][y].getNode(LEFT)))besuchtenode.add(board[x][y].getNode(LEFT));
+			   besuchtenode.add(board[x][y].getNode(LEFT));
 				
 			}
 			
 			
 			
-			if(board[x][y].getNode(RIGHT).getType()==type) {
+			if(board[x][y].getNode(RIGHT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
 				if(board[x][y].getNode(RIGHT).hasMeeple()) {
 					
 					spielfigur.put( board[x][y].getNode(RIGHT),board[x][y].getNode(RIGHT).getPlayer());
@@ -508,7 +508,7 @@ public class Gameboard extends Observable<Gameboard> {
 				if(type==FeatureType.CASTLE)score=+2;
 			    else if(type==FeatureType.ROAD) score++;
 			    else score++;
-			    if(!besuchtenode.contains(board[x][y].getNode(RIGHT)))besuchtenode.add(board[x][y].getNode(RIGHT));
+			    besuchtenode.add(board[x][y].getNode(RIGHT));
 				
 		}
 			
@@ -541,6 +541,7 @@ public class Gameboard extends Observable<Gameboard> {
 	
 
 		queue.push(nodeList.remove(0));
+		besuchtenode.add(queue.getLast());
 		// Iterate as long as the queue is not empty
 		// Remember: queue defines a connected graph
 		
