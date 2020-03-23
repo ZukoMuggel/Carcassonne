@@ -50,6 +50,7 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
 	 */
 	public void write(PrintWriter printWriter) {
 		// TODO
+		printWriter.write(name+";"+date.getTime()+";"+score+System.lineSeparator());
 	}
 
 	/**
@@ -60,7 +61,36 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
 	 */
 	public static ScoreEntry read(String line) {
 		// TODO
-		return null;
+		if (line == null) {
+			return null;
+        }
+
+        if("".equals(line))
+        {
+        	return null;
+        }
+
+        if(line.split(";").length != 3)
+        {
+        	return null;
+        }
+
+        //if char is enough
+        for(int i=0; i <= 2;i++)
+        {
+            if("".equals(line.split(";")[i]))
+            {
+            	return null;
+            }
+        }
+        //split the line-String
+        String[] info =line.split(";");
+        //transform the date 
+        String data = info[1];
+        Long result =  Long.parseLong(data);	 	
+        Date dataforuse=new Date(result);
+        
+        return new ScoreEntry(info[0], Integer.parseInt(info[2]),dataforuse);
 	}
 
 	/**
