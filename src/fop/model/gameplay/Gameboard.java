@@ -159,56 +159,47 @@ public class Gameboard extends Observable<Gameboard> {
 	 */
 	public boolean isTileAllowed(Tile t, int x, int y) {
 
-		Tile checkTile = board[x][y];
-		boolean allChecked = true;
+		boolean topcheck=true;
+		boolean leftcheck=true;
+		boolean rightcheck=true;
+		boolean bottomcheck=true;
 		
-		//edges of gameboard treatment
-		boolean dontCheck0 = x - 1 < 0;
-		boolean dontCheck1 = x + 1 > 143;
-		boolean dontCheck2 = y - 1 < 0;
-		boolean dontCheck3 = y + 1 > 143;
 
+		for(int rotation=0;rotation<4;rotation++) {
 		// Check top tile
-		if(dontCheck2 == false) {
-			checkTile = board[x][y - 1]; // Tile on the top of the given tile
-			if (checkTile.getNode(BOTTOM) != t.getNode(TOP)) { // checks if the adjacent tiles are valid
-				allChecked = false;
-			}
+		// TODO
+		if(x-1<0)topcheck=true;
+		else if(board[x-1][y]!=null) {
+		if(board[x-1][y].getNode(BOTTOM).getType()!=t.getNode(TOP).getType())topcheck= false;
+
 		}
-
-
 		// Check left tile
-		if(dontCheck0 == false) {
-			checkTile = board[x - 1][y]; // Tile on the left of the given tile
-
-			if (checkTile.getNode(RIGHT) != t.getNode(LEFT)) {
-				allChecked = false;
-			}
+		// TODO
+		
+        if(y-1<0)leftcheck=true;
+		else if(board[x][y-1]!=null) {
+		if(board[x][y-1].getNode(RIGHT).getType()==t.getNode(LEFT).getType())leftcheck=false;
 		}
+        // Check right tile
+		// TODO
+		if(y+1>board[0].length)rightcheck=true;
+		else if(board[x][y+1]!=null) {
+		if(board[x][y+1].getNode(LEFT).getType()==t.getNode(RIGHT).getType())rightcheck=false;
 
-
-		// Check right tile
-		if(dontCheck1 == false) {
-			checkTile = board[x + 1][y]; // Tile on the right of the given tile
-			if (checkTile.getNode(LEFT) != t.getNode(RIGHT)) {
-				allChecked = false;
-			}
 		}
-
 
 		// Check bottom tile
-		if(dontCheck3 == false) {
-			checkTile = board[x][y + 1]; // Tile on the bottom of the given tile
-			if (checkTile.getNode(TOP) != t.getNode(BOTTOM)) {
-				allChecked = false;
-			}
+		// TODO
+		if(x+1>board.length)bottomcheck=true;
+		else if(board[x+1][y]!=null) {
+		if(board[x+1][y].getNode(TOP).getType()==t.getNode(BOTTOM).getType())bottomcheck=false;
 		}
-
-
-		if (allChecked == true && checkSurroundedByNull(t, x, y) == false)
-			return true; // allchecked is true if (x;y) is a valid position
-		else
-			return false;
+		
+		if(topcheck && leftcheck && rightcheck && bottomcheck) return true;
+		t.rotateRight();
+		}
+		
+		return false;
 	}
 
 	/**
