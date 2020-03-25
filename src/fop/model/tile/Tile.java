@@ -154,10 +154,10 @@ public class Tile {
 		nodes = rotatedNodes;
 
 		//Increase rotation by 1. Reset if 3. (360° == 0°)
-		if(rotation == 3) {
+		if(rotation == 270) {
 			rotation = 0;
 		} else {
-			rotation++;
+			rotation = rotation + 90;
 		}
 	}
 
