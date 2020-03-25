@@ -15,10 +15,13 @@ import static fop.model.tile.Position.TOPRIGHT;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import fop.base.Edge;
@@ -168,31 +171,31 @@ public class Gameboard extends Observable<Gameboard> {
 		for(int rotation=0;rotation<4;rotation++) {
 		// Check top tile
 		// TODO
-		if(x-1<0)topcheck=true;
-		else if(board[x-1][y]!=null) {
-		if(board[x-1][y].getNode(BOTTOM).getType()!=t.getNode(TOP).getType())topcheck= false;
+		if(y-1<0)topcheck=true;
+		else if(board[x][y-1]!=null) {
+		if(board[x][y-1].getNode(BOTTOM).getType()!=t.getNode(TOP).getType())topcheck= false;
 
 		}
 		// Check left tile
 		// TODO
 		
-        if(y-1<0)leftcheck=true;
-		else if(board[x][y-1]!=null) {
-		if(board[x][y-1].getNode(RIGHT).getType()==t.getNode(LEFT).getType())leftcheck=false;
+        if(x-1<0)leftcheck=true;
+		else if(board[x-1][y]!=null) {
+		if(board[x-1][y].getNode(RIGHT).getType()!=t.getNode(LEFT).getType())leftcheck=false;
 		}
         // Check right tile
 		// TODO
-		if(y+1>board[0].length)rightcheck=true;
-		else if(board[x][y+1]!=null) {
-		if(board[x][y+1].getNode(LEFT).getType()==t.getNode(RIGHT).getType())rightcheck=false;
+		if(x+1>board[0].length)rightcheck=true;
+		else if(board[x+1][y]!=null) {
+		if(board[x+1][y].getNode(LEFT).getType()!=t.getNode(RIGHT).getType())rightcheck=false;
 
 		}
 
 		// Check bottom tile
 		// TODO
-		if(x+1>board.length)bottomcheck=true;
-		else if(board[x+1][y]!=null) {
-		if(board[x+1][y].getNode(TOP).getType()==t.getNode(BOTTOM).getType())bottomcheck=false;
+		if(y+1>board.length)bottomcheck=true;
+		else if(board[x][y+1]!=null) {
+		if(board[x][y+1].getNode(TOP).getType()!=t.getNode(BOTTOM).getType())bottomcheck=false;
 		}
 		
 		if(topcheck && leftcheck && rightcheck && bottomcheck) return true;
