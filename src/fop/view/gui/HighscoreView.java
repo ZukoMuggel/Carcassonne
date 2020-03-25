@@ -52,6 +52,15 @@ public class HighscoreView extends View {
 		
 		Resources resources = Resources.getInstance();
 		// TODO
+		String[] colummName= {"Date", "Name","Points"};
+		 String[][] data= new String[3][resources.getScoreEntries().size()];
+		for(int i=0;i<resources.getScoreEntries().size();i++) {
+			DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+			data[0][i]=df.format(resources.getScoreEntries().get(i).getDate().getTime());
+			data[1][i]=resources.getScoreEntries().get(i).getName();
+			data[2][i]=resources.getScoreEntries().get(i).getScore()+"";			
+		}
+		scoreTable=new JTable(data,colummName);
 		
 
 		scrollPane = new JScrollPane();
