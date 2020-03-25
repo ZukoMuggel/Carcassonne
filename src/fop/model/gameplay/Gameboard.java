@@ -162,16 +162,19 @@ public class Gameboard extends Observable<Gameboard> {
 	 */
 	public boolean isTileAllowed(Tile t, int x, int y) {
 
+		
 		boolean topcheck=true;
 		boolean leftcheck=true;
 		boolean rightcheck=true;
 		boolean bottomcheck=true;
 		
-
-		for(int rotation=0;rotation<4;rotation++) {
+		
+		
+ 
+		
 		// Check top tile
 		// TODO
-		if(y-1<0)topcheck=true;
+		if(y-1<0)topcheck=true;		
 		else if(board[x][y-1]!=null) {
 		if(board[x][y-1].getNode(BOTTOM).getType()!=t.getNode(TOP).getType())topcheck= false;
 
@@ -179,13 +182,13 @@ public class Gameboard extends Observable<Gameboard> {
 		// Check left tile
 		// TODO
 		
-        if(x-1<0)leftcheck=true;
+        if(x-1<0)leftcheck=true;        
 		else if(board[x-1][y]!=null) {
 		if(board[x-1][y].getNode(RIGHT).getType()!=t.getNode(LEFT).getType())leftcheck=false;
 		}
         // Check right tile
 		// TODO
-		if(x+1>board[0].length)rightcheck=true;
+		if(x+1>board.length)rightcheck=true;		
 		else if(board[x+1][y]!=null) {
 		if(board[x+1][y].getNode(LEFT).getType()!=t.getNode(RIGHT).getType())rightcheck=false;
 
@@ -193,18 +196,21 @@ public class Gameboard extends Observable<Gameboard> {
 
 		// Check bottom tile
 		// TODO
-		if(y+1>board.length)bottomcheck=true;
+		if(y+1>board[0].length)bottomcheck=true;		
 		else if(board[x][y+1]!=null) {
 		if(board[x][y+1].getNode(TOP).getType()!=t.getNode(BOTTOM).getType())bottomcheck=false;
 		}
 		
 		if(topcheck && leftcheck && rightcheck && bottomcheck) return true;
-		t.rotateRight();
-		}
 		
+		 
 		return false;
+		
+		
+		
+		
+		
 	}
-
 	/**
 	 * Checks if the given tile would be allowed anywhere on the board adjacent to
 	 * other tiles and according to the rules.
@@ -214,24 +220,39 @@ public class Gameboard extends Observable<Gameboard> {
 	 *         if not.
 	 */
 	public boolean isTileAllowedAnywhere(Tile newTile) {
-		// iterate over all x
-		for (int board_x = 0; board_x < 144; board_x++) {
-			// iterate over all y
-			for (int board_y = 0; board_y < 144; board_y++) {
-				// only test spot if not surrounded by only null and spot is not occupied by
-				// another tile
-				if (checkSurroundedByNull(newTile, board_x, board_y) == false && board[board_x][board_y] == null) {
-					// iterate over all possible rotations
-					for (int num_of_rot = 0; num_of_rot < 4; num_of_rot++) {
-						if (isTileAllowed(newTile, board_x, board_y)) {
-							// valid position was found
-							return true;
-						}
-						newTile.rotateRight();
-					}
-				}
+		// Iterate over all tiles
+		for(int x=0;x<board.length;x++) {
+			for(int y=0;y<board[0].length;y++) {
+				
+				if(board[x][y]!=null)continue;
+				// check top
+				// TODO
+				if(isTileAllowed(newTile, x, y))return true;
+
+				// check left
+				// TODO
+				newTile.rotateRight();
+				if(isTileAllowed(newTile, x, y))return true;
+
+				// check right
+				// TODO
+				newTile.rotateRight();
+				if(isTileAllowed(newTile, x, y))return true;
+
+				// check bottom
+				// TODO
+				newTile.rotateRight();
+				if(isTileAllowed(newTile, x, y))return true;
+				
+				newTile.rotateRight();
+			
 			}
-		}
+		
+		
+	}
+		
+			
+		
 		// no valid position was found
 		return false;
 	}
