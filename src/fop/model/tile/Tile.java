@@ -145,7 +145,7 @@ public class Tile {
 		rotatedNodes.put(Position.TOPRIGHT, this.getNode(Position.TOPLEFT));
 		rotatedNodes.put(Position.LEFT, this.getNode(Position.BOTTOM));
 		rotatedNodes.put(Position.CENTER, this.getNode(Position.CENTER));
-		rotatedNodes.put(Position.RIGHT, this.getNode(CENTER));
+		rotatedNodes.put(Position.RIGHT, this.getNode(TOP));
 		rotatedNodes.put(Position.BOTTOMLEFT, this.getNode(Position.BOTTOMRIGHT));
 		rotatedNodes.put(Position.BOTTOM, this.getNode(Position.RIGHT));
 		rotatedNodes.put(Position.BOTTOMRIGHT, this.getNode(Position.TOPRIGHT));
