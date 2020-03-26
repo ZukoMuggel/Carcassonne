@@ -94,6 +94,11 @@ public class Gameboard extends Observable<Gameboard> {
 	     if(topcheck && board[x][y-1].getNode(BOTTOM).getType()==t.getNode(TOP).getType())
 	      
 	    	 graph.addEdge(t.getNode(TOP),board[x][y-1].getNode(BOTTOM));
+	     
+	     if(topcheck && board[x][y-1].getNode(BOTTOMRIGHT)!=null  &&  t.getNode(TOPRIGHT)!=null && board[x][y-1].featureAtPosition(BOTTOMRIGHT)==t.featureAtPosition(TOPRIGHT))
+				graph.addEdge(t.getNode(TOPRIGHT),board[x][y-1].getNode(BOTTOMRIGHT));
+	     if(topcheck && board[x][y-1].getNode(BOTTOMLEFT)!=null &&  t.getNode(BOTTOMRIGHT)!=null  && board[x][y-1].featureAtPosition(BOTTOMLEFT)==t.featureAtPosition(TOPLEFT))
+				graph.addEdge(t.getNode(TOPLEFT),board[x][y-1].getNode(BOTTOMLEFT));
 	    	 
 	      
 	     
@@ -103,6 +108,11 @@ public class Gameboard extends Observable<Gameboard> {
 		
 		if(leftcheck && board[x-1][y].getNode(RIGHT).getType()==t.getNode(LEFT).getType())
 			graph.addEdge(t.getNode(LEFT),board[x-1][y].getNode(RIGHT));
+		if(leftcheck && board[x-1][y].getNode(TOPRIGHT)!=null &&  t.getNode(TOPLEFT)!=null && board[x-1][y].featureAtPosition(TOPRIGHT)==t.featureAtPosition(TOPLEFT))
+			graph.addEdge(t.getNode(TOPLEFT),board[x-1][y].getNode(TOPRIGHT));
+		if(leftcheck && board[x-1][y].getNode(BOTTOMRIGHT)!=null &&  t.getNode(BOTTOMLEFT)!=null && board[x-1][y].featureAtPosition(BOTTOMRIGHT)==t.featureAtPosition(BOTTOMLEFT))
+			graph.addEdge(t.getNode(BOTTOMLEFT),board[x-1][y].getNode(BOTTOMRIGHT));
+		
 
 
 		// Check right tile
@@ -111,6 +121,10 @@ public class Gameboard extends Observable<Gameboard> {
 		
 		if(rightcheck && board[x+1][y].getNode(LEFT).getType()==t.getNode(RIGHT).getType())
 			graph.addEdge(t.getNode(RIGHT),board[x+1][y].getNode(LEFT));
+		if(rightcheck && board[x+1][y].getNode(TOPLEFT)!=null &&  t.getNode(TOPRIGHT)!=null && board[x+1][y].featureAtPosition(TOPLEFT)==t.featureAtPosition(TOPRIGHT))
+			graph.addEdge(t.getNode(TOPRIGHT),board[x+1][y].getNode(TOPLEFT));
+		if(rightcheck && board[x+1][y].getNode(BOTTOMLEFT)!=null &&  t.getNode(BOTTOMRIGHT)!=null && board[x+1][y].featureAtPosition(BOTTOMLEFT)==t.featureAtPosition(BOTTOMRIGHT))
+			graph.addEdge(t.getNode(BOTTOMRIGHT),board[x+1][y].getNode(BOTTOMLEFT));
 
 
 		// Check bottom tile
@@ -118,6 +132,10 @@ public class Gameboard extends Observable<Gameboard> {
 		if(y+1<board[0].length && board[x][y+1]!=null)bottomcheck=true;
 		if(bottomcheck && board[x][y+1].getNode(TOP).getType()==t.getNode(BOTTOM).getType())
 			graph.addEdge(t.getNode(BOTTOM),board[x][y+1].getNode(TOP));
+		if(bottomcheck && board[x][y+1].getNode(TOPLEFT)!=null && t.getNode(TOPRIGHT)!=null&& board[x][y+1].featureAtPosition(TOPLEFT)==t.featureAtPosition(TOPRIGHT))
+			graph.addEdge(t.getNode(TOPRIGHT),board[x][y+1].getNode(TOPLEFT));
+		if(bottomcheck && board[x][y+1].getNode(TOPRIGHT)!=null  && t.getNode(TOPLEFT)!=null && board[x][y+1].featureAtPosition(TOPRIGHT)==t.featureAtPosition(TOPLEFT))
+			graph.addEdge(t.getNode(TOPRIGHT),board[x][y+1].getNode(TOPLEFT));
 			
 
 	}
