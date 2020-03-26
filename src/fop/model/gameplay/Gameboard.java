@@ -135,10 +135,11 @@ public class Gameboard extends Observable<Gameboard> {
 		if(bottomcheck && board[x][y+1].getNode(TOPLEFT)!=null && t.getNode(TOPRIGHT)!=null&& board[x][y+1].featureAtPosition(TOPLEFT)==t.featureAtPosition(TOPRIGHT))
 			graph.addEdge(t.getNode(TOPRIGHT),board[x][y+1].getNode(TOPLEFT));
 		if(bottomcheck && board[x][y+1].getNode(TOPRIGHT)!=null  && t.getNode(TOPLEFT)!=null && board[x][y+1].featureAtPosition(TOPRIGHT)==t.featureAtPosition(TOPLEFT))
-			graph.addEdge(t.getNode(TOPRIGHT),board[x][y+1].getNode(TOPLEFT));
+			graph.addEdge(t.getNode(TOPLEFT),board[x][y+1].getNode(TOPRIGHT));
 			
 
 	}
+
 	/**
 	 * This method checks if the spot where the given Tile shall be placed in is
 	 * surrounded by only null and therefore invalid
