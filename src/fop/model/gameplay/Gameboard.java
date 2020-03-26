@@ -140,40 +140,7 @@ public class Gameboard extends Observable<Gameboard> {
 
 	}
 
-	/**
-	 * This method checks if the spot where the given Tile shall be placed in is
-	 * surrounded by only null and therefore invalid
-	 * 
-	 * @param t Given Tile object for which check shall be performed
-	 * @param x x coordinate of the given Tile
-	 * @param y x coordinate of the given Tile
-	 * @return true if all surrounding spots are null, false if not
-	 */
-	private boolean checkSurroundedByNull(Tile t, int x, int y) {
-		boolean allNull = true;
-		
-		//edges of gameboard treatment
-		boolean dontCheck0 = x - 1 < 0;
-		boolean dontCheck1 = x + 1 > 143;
-		boolean dontCheck2 = y - 1 < 0;
-		boolean dontCheck3 = y + 1 > 143;
-
-		if (board[x - 1][y] != null && dontCheck0 == false) {
-
-		}
-		if (board[x + 1][y] != null && dontCheck1 == false) {
-
-		}
-		if (board[x][y - 1] != null && dontCheck2 == false) {
-
-		}
-		if (board[x][y + 1] != null && dontCheck3 == false) {
-
-		}
-		allNull = false;
-		return allNull;
-
-	}
+	
 
 	/**
 	 * Checks if the given tile could be placed at position x, y on the board
@@ -280,24 +247,15 @@ public class Gameboard extends Observable<Gameboard> {
 		// no valid position was found
 		return false;
 	}
+		
+			
 
 	/**
 	 * Calculates points for monasteries (one point for the monastery and one for
 	 * each adjacent tile).
 	 */
 	public void calculateMonasteries(State state) {
-		// the methods getNode() and getType of class Tile and FeatureNode might be
-		// helpful
-
-		// Check all surrounding tiles and add the points
-
-		// Points are given if the landscape is complete or the game is over
-		// Meeples are just returned in case of state == State.GAME_OVER
-		
-    //What is that mean? why should we set the score to 1 ,and which socre? we also dont have such a methode to change the value of socre 
-		// After adding the points to the overall points of the player, set the score to
-		// 1 again
-		
+		//the methods getNode() and getType of class Tile and FeatureNode might be helpful
 		if(state == State.GAME_OVER) {
 			
 			for(int x =0;x<board.length;x++) {
@@ -326,28 +284,29 @@ public class Gameboard extends Observable<Gameboard> {
 			}
 			
 		}
-                if(state != State.GAME_OVER) {
+if(state != State.GAME_OVER) {
 			
 			for(int x =0;x<board.length;x++) {
 				for(int y=0;y<board[0].length;y++) {
 					
-					
+					if(board[x][y]!=null && board[x][y].getNode(Position.CENTER)!=null) {
 					if(board[x][y].featureAtPosition(Position.CENTER)==FeatureType.MONASTERY && board[x][y].hasMeeple()) {
 						
 							Player a =board[x][y].getMeeple();
-							boolean complete =false;
+							boolean complete =true;
 							
 							
 							
 							for(int i =0;i<3;i++) {
 								for(int j =0;j<3;j++) {
 									
-									if(board[x-1+i][y-1+j]==null)complete=true;
+									if(board[x-1+i][y-1+j]==null)complete=false;
 								}
 							}
-							if(complete)continue;
+							if(!complete)continue;
 							
 							a.addScore(9);
+					}
 							
 							
 						
@@ -357,6 +316,12 @@ public class Gameboard extends Observable<Gameboard> {
 			}
 			
 		}
+		//Check all surrounding tiles and add the points
+				
+		//Points are given if the landscape is complete or the game is over
+		//Meeples are just returned in case of state == State.GAME_OVER
+				
+		//After adding the points to the overall points of the  player, set the score to 1 again
 	}
 
 	/**
@@ -374,20 +339,10 @@ public class Gameboard extends Observable<Gameboard> {
 		calculatePoints(ROAD, state);
 		calculateMonasteries(state);
 	}
-
-		/**
-	 * check if this feature is complete 
-	 * @param type FeatureType
-	 * @param x x-coordinate
-	 * @param y y-coordinate
-	 * @return true, if it is complete
-	 */
+	
 	private boolean checkcomplete(FeatureType type,int x ,int y) {
 		
-		
 	if(board[x][y]==null)return false;
-	
-	//if in this tile only one node belongs to this type,which means it is the end of feature
 		int i =0;
 		for(FeatureNode node :board[x][y].getNodes()) {
 			if(node.getType()==type)i++;
@@ -395,12 +350,7 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 		if(i==1)return true ;
 		
-		//road can be complete if node in the middle of tile is also a road
-				if(type==ROAD) {
-					if(board[x][y].getNode(Position.CENTER).getType()==type)return true;
-					
-				}
-		//if node is on top ,go check next tile above it
+		
 		if(board[x][y].getNode(TOP).getType()==type) {
 			
 			checkcomplete( type,x, y+1); 
@@ -426,7 +376,6 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 		return false;
 	}
-
 	/**
 	 * find all node that connects to the node you give in
 	 * @param type FeatureType
@@ -588,11 +537,12 @@ public class Gameboard extends Observable<Gameboard> {
 		if(state != State.GAME_OVER) {
 			if(type ==FeatureType.CASTLE) {
 				HashMap<Node<FeatureType>,Player>  figur =new HashMap<Node<FeatureType>,Player> ();
-				//wont end till nodelist is empty
+				
 					while(nodeList.size()!=0) {
-						//find the tile which has this node
+						
 					for(int x =0;x<board.length;x++) {
 						for(int y=0;y<board[0].length;y++) {
+							if(board[x][y]==null)continue;
 							//to save the mepple
 							HashMap<Node<FeatureType>,Player>  spielfigur =new HashMap<Node<FeatureType>,Player> ();
 							
@@ -600,7 +550,6 @@ public class Gameboard extends Observable<Gameboard> {
 							
                            //if board have this node
 									if(board[x][y].containsNode((FeatureNode)queue.getLast())){
-										//start from the next tile 
 										int x1=0 , y1=0;
 										if(board[x][y].getNode(TOP)==queue.getLast()) {
 											x1=x; y1=y+1;
@@ -722,13 +671,7 @@ public class Gameboard extends Observable<Gameboard> {
 			}
 			
 		}
-		
-		// Hint:
-		// If there is one straight positioned node that does not connect to another
-		// tile, the feature cannot be completed.
-
-
-		//TODO
+			//TODO
 		if(state == State.GAME_OVER) {
 			if(type==CASTLE) {
 						
@@ -941,6 +884,7 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 		}
 			}
+			
 	/**
 	 * Returns all Tiles on the Gameboard.
 	 * 
