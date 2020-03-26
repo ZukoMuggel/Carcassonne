@@ -97,7 +97,7 @@ public class Gameboard extends Observable<Gameboard> {
 	     
 	     if(topcheck && board[x][y-1].getNode(BOTTOMRIGHT)!=null  &&  t.getNode(TOPRIGHT)!=null && board[x][y-1].featureAtPosition(BOTTOMRIGHT)==t.featureAtPosition(TOPRIGHT))
 				graph.addEdge(t.getNode(TOPRIGHT),board[x][y-1].getNode(BOTTOMRIGHT));
-	     if(topcheck && board[x][y-1].getNode(BOTTOMLEFT)!=null &&  t.getNode(BOTTOMRIGHT)!=null  && board[x][y-1].featureAtPosition(BOTTOMLEFT)==t.featureAtPosition(TOPLEFT))
+	     if(topcheck && board[x][y-1].getNode(BOTTOMLEFT)!=null &&  t.getNode(TOPLEFT)!=null  && board[x][y-1].featureAtPosition(BOTTOMLEFT)==t.featureAtPosition(TOPLEFT))
 				graph.addEdge(t.getNode(TOPLEFT),board[x][y-1].getNode(BOTTOMLEFT));
 	    	 
 	      
@@ -140,7 +140,6 @@ public class Gameboard extends Observable<Gameboard> {
 
 	}
 
-	
 
 	/**
 	 * Checks if the given tile could be placed at position x, y on the board
