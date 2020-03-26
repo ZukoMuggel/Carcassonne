@@ -38,8 +38,9 @@ public class HighscoreView extends View {
 		lblTitle.setLocation((getWidth() - lblTitle.getWidth()) / 2, offsetY);
 		offsetY += lblTitle.getSize().height + 25;
 		scrollPane.setLocation(25, offsetY);
+		scoreTable.setLocation(25, offsetY);
 		scrollPane.setSize(getWidth() - 50, getHeight() - 50 - BUTTON_SIZE.height - offsetY);
-
+		scoreTable.setSize(getWidth() - 50, getHeight() - 50 - BUTTON_SIZE.height - offsetY);
 		btnBack.setLocation((getWidth() / 3) - (BUTTON_SIZE.width / 2), getHeight() - BUTTON_SIZE.height - 25);
 		btnClear.setLocation((2 * (getWidth() / 3) - (BUTTON_SIZE.width / 2)), getHeight() - BUTTON_SIZE.height - 25);
 	}
@@ -61,7 +62,7 @@ public class HighscoreView extends View {
 			data[2][i]=resources.getScoreEntries().get(i).getScore()+"";			
 		}
 		scoreTable=new JTable(data,colummName);
-		
+		add(scoreTable);
 
 		scrollPane = new JScrollPane();
 		add(scrollPane);
