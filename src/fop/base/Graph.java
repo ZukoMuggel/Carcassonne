@@ -59,7 +59,7 @@ public class Graph<T> {
 	 * @param nodeB
 	 * @return edge 
 	 */
-	private Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
+	public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
 		return this.edges.stream().filter(edge -> edge.hasEdge(nodeA, nodeB)).findFirst().orElse(null);
 	}
 
