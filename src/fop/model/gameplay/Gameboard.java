@@ -39,6 +39,7 @@ public class Gameboard extends Observable<Gameboard> {
 	private List<Tile> tiles;
 	private FeatureGraph graph;
 	private Tile newestTile;
+	List<Node<FeatureType>> visited= new ArrayList<Node<FeatureType>>();
 
 	public Gameboard() {
 		board = new Tile[144][144];
