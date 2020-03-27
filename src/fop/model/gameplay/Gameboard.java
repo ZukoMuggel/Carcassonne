@@ -375,133 +375,38 @@ if(state != State.GAME_OVER) {
 		}
 		return false;
 	}
-	/**
-	 * find all node that connects to the node you give in
-	 * @param type FeatureType
-	 * @param x x-coordinate
-	 * @param y y-coordinate
-	 * @param score 
-	 * @param besuchtenode node u have visited
-	 * @param spielfigur a list used to save the player
-	 */
-	private void findallconnected(FeatureType type,int x ,int y,int score,List<Node<FeatureType>> besuchtenode,HashMap<Node<FeatureType>,Player> spielfigur ) {
+	
+	private boolean checkcomplete(Tile t,FeatureType type) {
 		
-		if(board[x][y]!=null) {
-			
-		int i =0;
-		for(FeatureNode node :board[x][y].getNodes()) {
-			if(node.getType()==type)i++;
-			
-		}
-		//if in this tile only one node belongs to this type,which means it is the end of feature
-		if(i>1) {
-		
-		if(board[x][y].getNode(TOP).getType()==type && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-			if(board[x][y].getNode(TOP).hasMeeple()) {
-				spielfigur.put(board[x][y].getNode(TOP),board[x][y].getNode(TOP).getPlayer());
-			}
-			if(type==FeatureType.CASTLE)score=+2;//for CASTLE game-not-over
-		    else if(type==FeatureType.ROAD) score++;//for ROAD game-over and game-not-over
-		    else score++;//for Felder game-over
-		    besuchtenode.add(board[x][y].getNode(TOP));
-			findallconnected( type,x, y+1,score,besuchtenode,spielfigur); 
-		}
-		
-		
-		if(board[x][y].getNode(BOTTOM).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-			if(board[x][y].getNode(BOTTOM).hasMeeple()) {				
-				spielfigur.put(board[x][y].getNode(BOTTOM), board[x][y].getNode(BOTTOM).getPlayer());
-			}
-			if(type==FeatureType.CASTLE)score=+2;
-			else if(type==FeatureType.ROAD) score++;
-		    else score++;
-		    
-			besuchtenode.add(board[x][y].getNode(BOTTOM));
-			findallconnected( type,x, y-1,score,besuchtenode,spielfigur); 
-		}
-		
-		
-		if(board[x][y].getNode(LEFT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-			if(board[x][y].getNode(LEFT).hasMeeple()) {
+		for(int x =0;x<board.length;x++) {
+			for(int y=0;y<board[0].length;y++) {
 				
-				spielfigur.put(board[x][y].getNode(LEFT),board[x][y].getNode(LEFT).getPlayer());
-			}
-			if(type==FeatureType.CASTLE)score=+2;
-			else if(type==FeatureType.ROAD) score++;
-		    else score++;
-		   besuchtenode.add(board[x][y].getNode(LEFT));
-			findallconnected( type,x-1, y,score,besuchtenode,spielfigur); 
-		}
-		
-		
-		
-		if(board[x][y].getNode(RIGHT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-			if(board[x][y].getNode(RIGHT).hasMeeple()) {
 				
-				spielfigur.put( board[x][y].getNode(RIGHT),board[x][y].getNode(RIGHT).getPlayer());
-			}
-			if(type==FeatureType.CASTLE)score=+2;
-		    if(type==FeatureType.ROAD) score++;
-		    else if(type==FeatureType.ROAD) score++;
-		    else score++;
-		    besuchtenode.add(board[x][y].getNode(RIGHT));
-			findallconnected( type,x+1, y,score,besuchtenode,spielfigur); 
-		}
-		}
-		//when we come to the end of this FeatureType,we need to save it and add the score 
-		else {
-			if(board[x][y].getNode(TOP).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-				if(board[x][y].getNode(TOP).hasMeeple()) {
-					spielfigur.put( board[x][y].getNode(TOP),board[x][y].getNode(TOP).getPlayer());
-				}
-				if(type==FeatureType.CASTLE)score=+2;
-			    if(type==FeatureType.ROAD) score++;
-			   besuchtenode.add(board[x][y].getNode(TOP));
-				
-			}
-			
-			
-			if(board[x][y].getNode(BOTTOM).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-				if(board[x][y].getNode(BOTTOM).hasMeeple()) {				
-					spielfigur.put(board[x][y].getNode(BOTTOM),board[x][y].getNode(BOTTOM).getPlayer());
-				}
-				if(type==FeatureType.CASTLE)score=+2;
-			    else if(type==FeatureType.ROAD) score++;
-			    else score++;
-			    besuchtenode.add(board[x][y].getNode(BOTTOM));
-				
-			}
-			
-			
-			if(board[x][y].getNode(LEFT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-				if(board[x][y].getNode(LEFT).hasMeeple()) {
+				if(board[x][y]!=null && board[x][y]==t) {
+					if(board[x][y].getNode(TOP).getType()==type) {
+						if(board[x][y-1]==null)return false;
+					}
+					if(board[x][y].getNode(BOTTOM).getType()==type) {
+						if(board[x][y+1]==null)return false;
+					}
+					if(board[x][y].getNode(LEFT).getType()==type) {
+						
+						if(board[x-1][y]==null)return false;
+					}
+					if(board[x][y].getNode(RIGHT).getType()==type) {
+						
+						if(board[x+1][y]==null)return false;
+					}
 					
-					spielfigur.put(board[x][y].getNode(LEFT), board[x][y].getNode(LEFT).getPlayer());
 				}
-				if(type==FeatureType.CASTLE)score=+2;
-				else if(type==FeatureType.ROAD) score++;
-			    else score++;
-			   besuchtenode.add(board[x][y].getNode(LEFT));
+				
 				
 			}
-			
-			
-			
-			if(board[x][y].getNode(RIGHT).getType()==type  && !besuchtenode.contains(board[x][y].getNode(TOP))) {
-				if(board[x][y].getNode(RIGHT).hasMeeple()) {
-					
-					spielfigur.put( board[x][y].getNode(RIGHT),board[x][y].getNode(RIGHT).getPlayer());
-				}
-				if(type==FeatureType.CASTLE)score=+2;
-			    else if(type==FeatureType.ROAD) score++;
-			    else score++;
-			    besuchtenode.add(board[x][y].getNode(RIGHT));
-				
 		}
-			
+		return true;
 		}
-		}
-	}
+		
+		
 	/**
 	 * Calculates and adds points to the players that scored a feature. If the given
 	 * state is GAME_OVER, points are added to the player with the most meeple on a
@@ -512,375 +417,108 @@ if(state != State.GAME_OVER) {
 	 */
 	public void calculatePoints(FeatureType type, State state) {
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
-		List<Node<FeatureType>> besuchtenode = new ArrayList<Node<FeatureType>>();
-		
+		List<Node<FeatureType>> visitedNodes = new ArrayList<Node<FeatureType>>();
+		HashMap<Node<FeatureType>,Player>  figur =new HashMap<Node<FeatureType>,Player> ();
 		
 		
 		// queue defines the connected graph. If this queue is empty, every node in this graph will be visited.
 		// if nodeList is non-empty, insert the next node of nodeList into this queue
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
-		
+		Node<FeatureType> current =null;
 
 
 		int score = 0;
-		//boolean completed = true; // Is the feature completed? Is set to false if a node is visited that does not
+		boolean completed = true;
+		// Is the feature completed? Is set to false if a node is visited that does not
 									// connect to any other tile
 	
-
-		queue.push(nodeList.remove(0));
-		besuchtenode.add(queue.getLast());
+		nodeList.removeAll(visited);
+		if(nodeList.size()!=0) {
+		queue.push(nodeList.remove(0));}
+		//besuchtenode.add(queue.getLast());
 		// Iterate as long as the queue is not empty
 		// Remember: queue defines a connected graph
 		
 		//TODO
 		if(state != State.GAME_OVER) {
-			if(type ==FeatureType.CASTLE) {
-				HashMap<Node<FeatureType>,Player>  figur =new HashMap<Node<FeatureType>,Player> ();
-				
-					while(nodeList.size()!=0) {
-						
-					for(int x =0;x<board.length;x++) {
-						for(int y=0;y<board[0].length;y++) {
-							if(board[x][y]==null)continue;
-							//to save the mepple
-							HashMap<Node<FeatureType>,Player>  spielfigur =new HashMap<Node<FeatureType>,Player> ();
-							
-						
-							
-                           //if board have this node
-									if(board[x][y].containsNode((FeatureNode)queue.getLast())){
-										int x1=0 , y1=0;
-										if(board[x][y].getNode(TOP)==queue.getLast()) {
-											x1=x; y1=y+1;
-										}
-										if(board[x][y].getNode(BOTTOM)==queue.getLast()) {
-											x1=x; y1=y-1;
-										}
-										if(board[x][y].getNode(LEFT)==queue.getLast()) {
-											x1=x-1; y1=y;
-										}
-										if(board[x][y].getNode(RIGHT)==queue.getLast()) {
-											x1=x+1; y1=y;
-										}
-										if(((FeatureNode) queue.getLast()).hasMeeple()) {
-											
-											spielfigur.put((FeatureNode)queue.getLast(),((FeatureNode) queue.getLast()).getPlayer());
-										}
-										
-										
-										
-										//check if  feature is complete
-										if(checkcomplete( type, x1 , y1)) {
-											//find all feature that  connects to this node
-											findallconnected( type, x1 , y1, score, besuchtenode, spielfigur );
-											figur.putAll(spielfigur);									
-											besuchtenode.remove(queue.getLast());
-										for(Node<FeatureType> n:besuchtenode) {
-											nodeList.remove(n);
-										}
-										}
-										if(nodeList.get(0)!=null)queue.push(nodeList.remove(0));
-										
-										
-					}
-					
-				}
-					}
-					if(figur!=null) {
-						Collection<Player> playerCollection =figur.values();
-						for(Player p : playerCollection) {
-							p.addScore(2);
-							
-							}
-						Set<Player> set = new HashSet<>(playerCollection);
-						for(Player p : set) {
-							p.addScore(score);
-							
-							}
-					
-					}
-				
-					
-				
-				
-			}
+		if(type ==FeatureType.CASTLE) {
 			
-			
-			if(type ==FeatureType.ROAD) {
-				HashMap<Node<FeatureType>,Player> figurRoad =new HashMap<Node<FeatureType>,Player>();
-					while(nodeList.size()!=0) {
+			while(!queue.isEmpty()) {
+				current =queue.pop();
+				if(checkcomplete(getTileContainingNode((FeatureNode) current),CASTLE)) {
+				visitedNodes.add(current);
+				 for(int i =0;i<graph.getEdges(current).size();i++) {
 						
-					for(int x =0;x<board.length;x++) {
-						for(int y=0;y<board[0].length;y++) {
-							HashMap<Node<FeatureType>,Player> spielfigur =new HashMap<Node<FeatureType>,Player>();
-							
-							
-									if(board[x][y].containsNode((FeatureNode)queue.getLast())){
-										int x1=0 , y1=0;
-										if(board[x][y].getNode(TOP)==queue.getLast()) {
-											x1=x; y1=y+1;
-										}
-										if(board[x][y].getNode(BOTTOM)==queue.getLast()) {
-											x1=x; y1=y-1;
-										}
-										if(board[x][y].getNode(LEFT)==queue.getLast()) {
-											x1=x-1; y1=y;
-										}
-										if(board[x][y].getNode(RIGHT)==queue.getLast()) {
-											x1=x+1; y1=y;
-										}
-                                        if(((FeatureNode) queue.getLast()).hasMeeple()) {
-											
-											spielfigur.put((FeatureNode)queue.getLast(),((FeatureNode) queue.getLast()).getPlayer());
-										}
-										
-										if(checkcomplete( type, x1 , y1)) {
-											findallconnected( type, x1 , y1, score, besuchtenode, spielfigur );
-											figurRoad.putAll(spielfigur);
-											besuchtenode.remove(queue.getLast());
-										
-										for(Node<FeatureType> n:besuchtenode) {
-											nodeList.remove(n);
-										}
-										
-										
-										
-										}
-										if(nodeList.get(0)!=null)queue.push(nodeList.remove(0));
-									}
-									
-										
-					}
-					
-				}
-					}
-				if(figurRoad!=null) {
-					Collection<Player> playerCollection =figurRoad.values();
-					Set<Player> set = new HashSet<>(playerCollection);
-					for(Player p : set) {
-						p.addScore(score);
-						
+						FeatureNode n=(FeatureNode) graph.getEdges(current).get(i).getOtherNode(current);
+						if(!visitedNodes.contains(n)){
+							visitedNodes.add(n);
+							queue.offer(n);
 						}
+						
 				}
+				}else {
+					visitedNodes.clear();
+					break;
+				}
+			}
+			if(visitedNodes!=null) {
+			for(Node<FeatureType> n:visitedNodes) {
+				visited.add(n);
+				score=score+2;
+				if( ((FeatureNode) n).hasMeeple())
+					figur.put(n,((FeatureNode) n).getPlayer());
+			}
+			if(figur!=null) {
+				Collection<Player> playerCollection =figur.values();
+				
+				Set<Player> set = new HashSet<>(playerCollection);
+				for(Player p : set) {
+					p.addScore(score);
 					
-					
-				
-				
-				
+					}
+			
+			
+		}
 			}
 			
+			
+				
+				
+		}
 		}
 			//TODO
 		if(state == State.GAME_OVER) {
-			if(type==CASTLE) {
-						
+			if(type ==FeatureType.CASTLE) {
+				HashMap<Node<FeatureType>,Player>  figurStadt =new HashMap<Node<FeatureType>,Player> ();
 				while(nodeList.size()!=0) {
-					HashMap<Node<FeatureType>,Player>  figuroverStadt =new HashMap<Node<FeatureType>,Player> ();
-					
-				for(int x =0;x<board.length;x++) {
-					for(int y=0;y<board[0].length;y++) {
-						HashMap<Node<FeatureType>,Player>  spielfigur =new HashMap<Node<FeatureType>,Player>();
-						
-						
-								if(board[x][y].containsNode((FeatureNode)queue.getLast())){
-									int x1=0 , y1=0;
-									
-									if(board[x][y].getNode(TOP)==queue.getLast() ) {
-										x1=x; y1=y+1;
-										
-									}
-									if(board[x][y].getNode(BOTTOM)==queue.getLast()) {
-										x1=x; y1=y-1;
-										
-									}
-									if(board[x][y].getNode(LEFT)==queue.getLast()) {
-										x1=x-1; y1=y;
-										
-
-									}
-									if(board[x][y].getNode(RIGHT)==queue.getLast()) {
-										x1=x+1; y1=y;
-										
-									}
-									if(((FeatureNode) queue.getLast()).hasMeeple()) {
-										
-										spielfigur.put((FeatureNode)queue.getLast(),((FeatureNode) queue.getLast()).getPlayer());
-									}
-									
-									if(!checkcomplete( type, x1 , y1) ) {
-										
-										findallconnected( type, x1 , y1, score, besuchtenode, spielfigur );
-										figuroverStadt.putAll(spielfigur);
-										besuchtenode.remove(queue.getLast());
-										for(Node<FeatureType> n:besuchtenode) {
-											nodeList.remove(n);
-										}
-										
-									}
-									if(nodeList.get(0)!=null)queue.push(nodeList.remove(0));
-										
-									
-
-										
+					if(!checkconnected((FeatureNode)queue.pop(), visitedNodes) ) {
+						for(Node<FeatureType> n:visitedNodes) {
+							if(nodeList.contains(n))nodeList.remove(n);
+							score=score+1;
+							if( ((FeatureNode) n).hasMeeple())
+								figurStadt.put(n,((FeatureNode) n).getPlayer());
+						}
+						if(figurStadt!=null) {
+							Collection<Player> playerCollection =figurStadt.values();
+							for(Player p : playerCollection) {
+								p.addScore(1);
+								
 								}
-				
-			}
-				}
-				if(figuroverStadt!=null) {
-				Collection<Player> playerCollection =figuroverStadt.values();
-				for(Player p : playerCollection) {
-					p.addScore(1);
-					
-					}
-				Set<Player> set = new HashSet<>(playerCollection);
-				for(Player p : set) {
-					p.addScore(score);
-					
-					}
-				}
-				
-				
-				}
-			}
-			
-			if(type==ROAD) {
-				
-				while(nodeList.size()!=0) {
-					HashMap<Node<FeatureType>,Player>  figuroverroad =new HashMap<Node<FeatureType>,Player> ();
-					
-				for(int x =0;x<board.length;x++) {
-					for(int y=0;y<board[0].length;y++) {
-						HashMap<Node<FeatureType>,Player>  spielfigur =new HashMap<Node<FeatureType>,Player> ();
-						
-						
-								if(board[x][y].containsNode((FeatureNode)queue.getLast())){
-									int x1=0 , y1=0;
-									
-									if(board[x][y].getNode(TOP)==queue.getLast() ) {
-										x1=x; y1=y+1;
-										
-									}
-									if(board[x][y].getNode(BOTTOM)==queue.getLast()) {
-										x1=x; y1=y-1;
-										
-									}
-									if(board[x][y].getNode(LEFT)==queue.getLast()) {
-										x1=x-1; y1=y;
-										
-
-									}
-									if(board[x][y].getNode(RIGHT)==queue.getLast()) {
-										x1=x+1; y1=y;
-										
-									}
-									if(((FeatureNode) queue.getLast()).hasMeeple()) {
-										
-										spielfigur.put((FeatureNode)queue.getLast(),((FeatureNode) queue.getLast()).getPlayer());
-									}
-									
-									if(!checkcomplete( type, x1 , y1) ) {
-										
-										findallconnected( type, x1 , y1, score, besuchtenode, spielfigur );
-										figuroverroad.putAll(spielfigur);
-										besuchtenode.remove(queue.getLast());
-										for(Node<FeatureType> n:besuchtenode) {
-											nodeList.remove(n);
-										}
-										
-									}
-									if(nodeList.get(0)!=null)queue.push(nodeList.remove(0));
-										
-									
-
-										
+							Set<Player> set = new HashSet<>(playerCollection);
+							for(Player p : set) {
+								p.addScore(score);
+								
 								}
-				
-			}
-				}
-				if(figuroverroad!=null) {
-				Collection<Player> playerCollection =figuroverroad.values();
-				Set<Player> set = new HashSet<>(playerCollection);
-				for(Player p : set) {
-					p.addScore(score);
-					
-					}
-				}
-				
-				
-				}
-			}
-			
-          if(type==FIELDS) {
-				
-				while(nodeList.size()!=0) {
-					HashMap<Node<FeatureType>,Player>  figuroverroad =new HashMap<Node<FeatureType>,Player>();
-					
-				for(int x =0;x<board.length;x++) {
-					for(int y=0;y<board[0].length;y++) {
-						HashMap<Node<FeatureType>,Player>  spielfigur =new HashMap<Node<FeatureType>,Player>();
 						
 						
-								if(board[x][y].containsNode((FeatureNode)queue.getLast())){
-									int x1=0 , y1=0;
-									
-									if(board[x][y].getNode(TOP)==queue.getLast() ) {
-										x1=x; y1=y+1;
-										
-									}
-									if(board[x][y].getNode(BOTTOM)==queue.getLast()) {
-										x1=x; y1=y-1;
-										
-									}
-									if(board[x][y].getNode(LEFT)==queue.getLast()) {
-										x1=x-1; y1=y;
-										
-
-									}
-									if(board[x][y].getNode(RIGHT)==queue.getLast()) {
-										x1=x+1; y1=y;
-										
-									}
-									if(((FeatureNode) queue.getLast()).hasMeeple()) {
-										
-										spielfigur.put((FeatureNode)queue.getLast(),((FeatureNode) queue.getLast()).getPlayer());
-									}
-									
-									if(!checkcomplete( type, x1 , y1) ) {
-										
-										findallconnected( type, x1 , y1, score, besuchtenode, spielfigur );
-										figuroverroad.putAll(spielfigur);
-										besuchtenode.remove(queue.getLast());
-										for(Node<FeatureType> n:besuchtenode) {
-											nodeList.remove(n);
-										}
-										
-									}
-									if(nodeList.get(0)!=null)queue.push(nodeList.remove(0));
-										
-									
-
-										
-								}
-				
-			}
-				}
-				if(figuroverroad!=null) {
-				Collection<Player> playerCollection =figuroverroad.values();
-				Set<Player> set = new HashSet<>(playerCollection);
-				for(Player p : set) {
-					p.addScore((int)score/4);
+					}
+					}
+					if(nodeList.size()>0)
+					queue.push(nodeList.remove(0));
 					
 					}
-				}
 				
-				}
 			}
-			
-				
-				
-			
-			
-		}
 		}
 			}
 			
