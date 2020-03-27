@@ -339,42 +339,7 @@ if(state != State.GAME_OVER) {
 		calculateMonasteries(state);
 	}
 	
-	private boolean checkcomplete(FeatureType type,int x ,int y) {
-		
-	if(board[x][y]==null)return false;
-		int i =0;
-		for(FeatureNode node :board[x][y].getNodes()) {
-			if(node.getType()==type)i++;
-			
-		}
-		if(i==1)return true ;
-		
-		
-		if(board[x][y].getNode(TOP).getType()==type) {
-			
-			checkcomplete( type,x, y+1); 
-		}
-		
-		
-		if(board[x][y].getNode(BOTTOM).getType()==type) {
-			
-			checkcomplete( type,x, y-1); 
-		}
-		
-		
-		if(board[x][y].getNode(LEFT).getType()==type) {
-			
-			checkcomplete( type,x-1, y); 
-		}
-		
-		
-		
-		if(board[x][y].getNode(RIGHT).getType()==type) {
-			
-			checkcomplete( type,x+1, y); 
-		}
-		return false;
-	}
+	
 	
 	private boolean checkcomplete(Tile t,FeatureType type) {
 		
@@ -406,6 +371,21 @@ if(state != State.GAME_OVER) {
 		return true;
 		}
 		
+	private boolean checkconnected(FeatureNode node,List<Node<FeatureType>> visitedNodes) {
+		if(visitedNodes.contains(node)) return true;
+		visitedNodes.add(node);
+		boolean check=true;
+		for(int i =0;i<graph.getEdges(node).size();i++) {
+			
+			FeatureNode n=(FeatureNode) graph.getEdges(node).get(i).getOtherNode(node);
+			if(!visitedNodes.contains(n)){
+				visitedNodes.add(n);
+			check= checkcomplete(getTileContainingNode(n),n.getType()) && checkconnected( n, visitedNodes);
+			}
+			
+	}
+		return check;
+	}
 		
 	/**
 	 * Calculates and adds points to the players that scored a feature. If the given
